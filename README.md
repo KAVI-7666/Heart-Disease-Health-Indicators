@@ -112,11 +112,7 @@ The pipeline executes:
 6. `catboost.ipynb`
 7. `tests/test_model.py`
 
-Logs are written to:
 
-```text
-logs/pipeline.log
-```
 
 ## How to Run the Interface
 

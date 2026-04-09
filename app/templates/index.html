@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Risk Predictor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="page-shell">
+        <section class="hero-panel">
+            <div class="pulse-ring pulse-ring-one"></div>
+            <div class="pulse-ring pulse-ring-two"></div>
+            <p class="eyebrow">Heart Disease Health Indicators</p>
+            <h1>Heart Attack Risk Interface</h1>
+
+
+            {% if prediction_text %}
+            <div class="result-card {{ 'high-risk' if 'High' in prediction_text else 'low-risk' }}">
+                <p class="result-label">Prediction Result</p>
+                <h2>{{ prediction_text }}</h2>
+                <p class="result-probability">Risk Probability: {{ risk_probability }}%</p>
+            </div>
+            {% else %}
+            <div class="result-card waiting-card">
+                <p class="result-label">Model Status</p>
+                <h2>Ready for Prediction</h2>
+                <p class="result-probability">Complete the form to calculate risk.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="form-panel">
+            <form method="POST" class="risk-form">
+                <div class="form-header">
+                    <h2>Health Indicators</h2>
+                    <p>Enter the following health indicators to assess heart attack risk.</p>
+                </div>
+
+                <div class="form-grid">
+                    {% for field in fields %}
+                    {% set config = field_config[field] %}
+                    <div class="input-card">
+                        <label for="{{ field }}">{{ config.label }}</label>
+
+                        {% if config.type == 'select' %}
+                        <select name="{{ field }}" id="{{ field }}">
+                            {% for option in config.options %}
+                            <option value="{{ option.value }}" {% if submitted_values[field]==option.value|string
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input type="number" name="{{ field }}" id="{{ field }}" value="{{ submitted_values[field] }}"
+                            step="{{ config.step }}" min="{{ config.min }}" max="{{ config.max }}" required>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="predict-button">Predict Heart Risk</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

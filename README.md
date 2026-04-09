@@ -160,6 +160,4 @@ The web interface:
 - Notebooks are executed in place using Jupyter `nbconvert`
 - The interface is designed for local prediction and demonstration
 
-## Author
 
-This project was built as a complete machine learning workflow for heart disease risk prediction, from data preprocessing to deployment interface.
